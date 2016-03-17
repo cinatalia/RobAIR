@@ -53,8 +53,8 @@
                 </div>
             </div>
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">Contrôles</div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Contrôles</div>
                     <div class="panel-body">
                         <table class="table table-bordered text-center controles">
                             <tbody>
@@ -102,8 +102,18 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                </div>
+                    </div>   
+            </div>
+
+            <div class="panel panem-default">
+                <div class="panel-heading">Share</div>
+                <div class="panel-body">
+                    <form action="/app/upload" method="POST" enctype="multipart/form-data">
+                        <input type="file" name="image">
+                        <input type="submit" value="Upload Image">
+                    </form>    
+                </div>    
+            </div>    
 
         </div>
     </div>

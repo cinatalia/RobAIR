@@ -3,8 +3,8 @@ var fs = require('fs'),
     http = require('http'),
     express = require('express'),
     app = express();
-var session = require('express-session')
-
+var session = require('express-session');
+var multer = require('multer');
 //Config file
 var data = fs.readFileSync("config.json");
 var config = JSON.parse(data);
@@ -18,6 +18,13 @@ if (localAddress.length > 0)
 {
 	localAddress=localAddressTab[0].address;
 }
+
+
+
+////Uploal file
+var uploading = multer({
+    dest:__dirname / '../public/uploads/',
+});
 
 
 
@@ -52,9 +59,15 @@ app.get('/', function(req, res) {
         return res.sendFile(__dirname+'/views/client/index.html');
     }
 });
+
 app.get('/local', function(req, res) {
     res.header('Content-type', 'text/html');
         return res.sendFile(__dirname+'/views/client/index.html');
+});
+
+app.post('/upload',uploading,function(req,res){
+
+   console.log('toto');
 });
 
 https.createServer({
