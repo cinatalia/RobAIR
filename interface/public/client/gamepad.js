@@ -20,7 +20,29 @@ var GamepadHandler = {
 	},
 
 	update_speed: function(pad) {
-		robairros.analogGamepad(pad.axes[0], -pad.axes[1]);
+		var speedL, speedR, turn;
+		var turn_fact = 0.6;
+
+		if (pad.buttons[0].pressed && !pad.buttons[1].pressed) {
+			// Forward
+			turn = pad.axes[0] * turn_fact * robairros.speed;
+			speedL = robairros.speed - Math.abs(turn) - turn;
+			speedR = robairros.speed - Math.abs(turn) + turn;
+		} else if (!pad.buttons[0].pressed && pad.buttons[1].pressed) {
+			// Backward
+			turn = pad.axes[0] * turn_fact * robairros.speed;
+			speedL = -robairros.speed + Math.abs(turn) - turn;
+			speedR = -robairros.speed + Math.abs(turn) + turn;
+		} else {
+			// Turn only
+			speedL = -pad.axes[0] * robairros.speed;
+			speedR = pad.axes[0] * robairros.speed;
+		}
+
+		topic_cmd.publish(new ROSLIB.Message({
+			speedL: Math.round(speedL),
+			speedR: Math.round(speedR)
+		}));
 	},
 
 	head_target: 0,
