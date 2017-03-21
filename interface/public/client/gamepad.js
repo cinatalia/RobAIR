@@ -19,6 +19,8 @@ var GamepadHandler = {
 		}
 	},
 
+	prev_speeds: [0, 0],
+
 	update_speed: function(pad) {
 		var speedL, speedR, turn;
 		var turn_fact = 0.6;
@@ -38,6 +40,12 @@ var GamepadHandler = {
 			speedL = -pad.axes[0] * robairros.speed;
 			speedR = pad.axes[0] * robairros.speed;
 		}
+
+		if (Math.abs(speedL) <= 2 && Math.abs(speedR) <= 2
+				&& this.prev_speeds[0] == 0 && this.prev_speeds[1] == 0)
+			return;
+
+		this.prev_speeds = [speedL, speedR];
 
 		topic_cmd.publish(new ROSLIB.Message({
 			speedL: Math.round(speedL),
