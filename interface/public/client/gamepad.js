@@ -20,6 +20,8 @@ var GamepadHandler = {
 	},
 
 	prev_speeds: [0, 0],
+	last_repeat: null,
+	repeat_delay: 1000,
 
 	update_speed: function(pad) {
 		var speedL, speedR, turn;
@@ -41,14 +43,20 @@ var GamepadHandler = {
 			speedR = pad.axes[0] * robairros.speed;
 		}
 
-		if (speedL == this.prev_speeds[0] && speedR == this.prev_speeds[1])
-			return;
 
-		if (Math.abs(speedL) <= 2 && Math.abs(speedR) <= 2
-				&& this.prev_speeds[0] == 0 && this.prev_speeds[1] == 0)
-			return;
+		// Repeat messages for this.repeat_delay milliseconds then stop
+
+		if (speedL == this.prev_speeds[0] && speedR == this.prev_speeds[1]) {
+			if (this.last_repeat == null)
+				this.last_repeat = new Date;
+			if (new Date - this.last_repeat > this.repeat_delay)
+				return;
+		} else {
+			this.last_repeat = null;
+		}
 
 		this.prev_speeds = [speedL, speedR];
+
 
 		topic_cmd.publish(new ROSLIB.Message({
 			speedL: Math.round(speedL),
