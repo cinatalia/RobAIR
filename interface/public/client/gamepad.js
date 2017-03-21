@@ -41,6 +41,9 @@ var GamepadHandler = {
 			speedR = pad.axes[0] * robairros.speed;
 		}
 
+		if (speedL == this.prev_speeds[0] && speedR == this.prev_speeds[1])
+			return;
+
 		if (Math.abs(speedL) <= 2 && Math.abs(speedR) <= 2
 				&& this.prev_speeds[0] == 0 && this.prev_speeds[1] == 0)
 			return;
