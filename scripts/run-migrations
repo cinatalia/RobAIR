@@ -1,0 +1,11 @@
+#!/bin/bash
+
+new_migrations=$(
+	( git ls-tree --full-tree --name-only 'HEAD@{1}' scripts/migrations/
+	git ls-tree --full-tree --name-only 'HEAD' scripts/migrations/ ) | sort -u)
+
+for m in "$new_migrations"; do
+	[ ! -x "$m" ] && continue
+	echo "Running migration script $m"
+	"$m"
+done
